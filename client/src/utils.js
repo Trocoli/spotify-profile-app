@@ -1,17 +1,15 @@
 /**
  * Higher-order function for async/await error handling
- * @param {function} fn an asnc function
+ * @param {function} fn an async function
  * @returns {function}
  */
-
-export const catchErrors = (fn) => {
-  return function (...args) {
+ export const catchErrors = fn => {
+  return function(...args) {
     return fn(...args).catch((err) => {
-      console.log(err);
-    });
-  };
-};
-
+      console.error(err);
+    })
+  }
+}
 
 export const formatDuration = ms => {
   const minutes = Math.floor(ms/60000);

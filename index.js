@@ -12,14 +12,6 @@ const REDIRECT_URL = process.env.REDIRECT_URL;
 
 // app.METHOD(PATH, HANDLER);
 
-app.get("/", (req, res) => {
-  const data = {
-    name: "Ygorrrrrr",
-    isAwesome: true,
-  };
-  res.json(data);
-});
-
 const generateRandomString = (length) => {
   // func to generate random string for security measures when dealing with access keys.
   let text = "";

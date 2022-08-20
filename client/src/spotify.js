@@ -4,7 +4,7 @@ import axios from "axios";
 const LOCALSTORAGE_KEYS = {
   accessToken: "spotify_access_token",
   refreshToken: "spotify_resfresh_token",
-  expireTime: "spotidy_token_expire_time",
+  expireTime: "spotify_token_expire_time",
   timestamp: "spotify_token_timestamp",
 };
 
@@ -42,7 +42,7 @@ const hasTokenExpired = () => {
 
 const refreshToken = async () => {
   try {
-    // logout if there's no refresh token stored or we got into a reload infinite loop
+    // Logout if there's no refresh token stored or we've managed to get into a reload infinite loop
     if (
       !LOCALSTORAGE_VALUES.refreshToken ||
       LOCALSTORAGE_VALUES.refreshToken === "undefined" ||
@@ -52,19 +52,22 @@ const refreshToken = async () => {
       logout();
     }
 
+    // Use `/refresh_token` endpoint from our Node app
     const { data } = await axios.get(
       `/refresh_token?refresh_token=${LOCALSTORAGE_VALUES.refreshToken}`
     );
 
-    // update localstorage values
+    // Update localStorage values
     window.localStorage.setItem(
       LOCALSTORAGE_KEYS.accessToken,
-      data.accessToken
+      data.access_token
     );
     window.localStorage.setItem(LOCALSTORAGE_KEYS.timestamp, Date.now());
+
+    // Reload the page for localStorage updates to be reflected
     window.location.reload();
-  } catch (err) {
-    console.log(err);
+  } catch (e) {
+    console.error(e);
   }
 };
 
@@ -148,3 +151,11 @@ export const getTopArtists = (time_range = "short_term") => {
 export const getTopTracks = (time_range = "short_term") => {
   return axios.get(`/me/top/tracks?time_range=${time_range}`);
 };
+
+export const getPlaylistById = (playlist_id) => {
+  return axios.get(`playlists/${playlist_id}`);
+};
+
+export const getAudioFeaturesForTracks = ids => {
+  return axios.get(`/audio-features?ids=${ids}`);
+}

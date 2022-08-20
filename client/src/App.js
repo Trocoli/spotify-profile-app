@@ -2,14 +2,13 @@ import { useState, useEffect } from "react";
 import { GlobalStyle } from "./styles";
 import { accessToken, logout, getCurrentUserProfile } from "./spotify";
 import { catchErrors } from "./utils";
-import { Login, Profile } from './pages';
+import { Login, Profile, TopArtists, TopTracks, Playlists, Playlist } from './pages';
 import styled from 'styled-components/macro';
 
 import {
   BrowserRouter as Router,
-  Switch,
+  Routes,
   Route,
-  Link,
   useLocation,
 } from "react-router-dom";
 
@@ -56,7 +55,7 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <div className='app'>
       <GlobalStyle />
       {!token ? (
         <Login />
@@ -65,23 +64,13 @@ function App() {
         <StyledLogoudBtn onClick={logout}>Log out</StyledLogoudBtn>
         <Router>
           <ScrollToTop />
-          <Switch>
-            <Route path="/top-artists">
-              <h1>Top Artists</h1>
-            </Route>
-            <Route path="/top-tracks">
-              <h1>Top Tracks</h1>
-            </Route>
-            <Route path="/playlists/:id">
-              <h1>Playlist</h1>
-            </Route>
-            <Route path="/playlists">
-              <h1>Playlists</h1>
-            </Route>
-            <Route path="/">
-              <Profile />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route path="/top-artists" element={<TopArtists />}/>
+            <Route path="/top-tracks" element={<TopTracks />} />
+            <Route path="/playlists/:id" element={<Playlist />} />
+            <Route path="/playlists" element={<Playlists />}/>
+            <Route exact path="/" element={<Profile />} />
+          </Routes>
         </Router></>
       )}
     </div>
